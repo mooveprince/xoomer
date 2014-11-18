@@ -10,8 +10,11 @@ router.get('/terms', function(req, res) {
     res.render('terms');
 });
 
-router.post ('/', function (req, res) {
-    console.log ("Inside POST");
+router.post ('/addSubscription', function (req, res) {
+    console.log ("Inside POST.." + req.body.email);
+    //If new email, display thanks for subscription
+    res.render('index', {message: "You will receive notification whenever the rate changed"})
+    //If existing email, throw err
 });
 
 
