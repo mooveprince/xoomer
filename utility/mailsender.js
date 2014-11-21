@@ -43,8 +43,9 @@ exports.sendMail = function (nodemailer, smtpPool, client, fs, template, mustach
 
 getEmailReceipentList = function (client, callback) {
     client.query('select email from xoomercustomer where subscribed = \'Y\'', function(err, result) {
-      if (err)
-       { console.error(err); }
+      if (err) { 
+        console.error(err); 
+      }
       else
        { 
            for (var i=0; i<result.rows.length; i++ ) {

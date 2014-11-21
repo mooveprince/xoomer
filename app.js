@@ -35,16 +35,22 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-
-
-var template = process.cwd() + '/rateChangeMail.html';
-
 //DB Connection
 var pg = require('pg');
 var conString = process.env.DATABASE_URL || "postgres://local_admin:1661@localhost:5432/local_admin";
 var client = new pg.Client(conString);
 client.connect();
+
+// Make our sockets accessible to our router
+app.use(function(req,res,next){
+    req.client = client;
+    next();
+});
+app.use('/', routes);
+
+
+var template = process.cwd() + '/rateChangeMail.html';
+
 
 var job = new CronJob({
   cronTime: '0 * * * * *',
