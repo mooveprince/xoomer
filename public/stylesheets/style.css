@@ -2,10 +2,10 @@
 
 html,body {
   height:100%;
+  font-family: Montserrat, arial, sans-serif;
 }
 
 h1 {
-  font-family: 'Antic Slab', serif;
   font-size:80px;
   color:#efefef;
 }
@@ -15,7 +15,7 @@ h1 {
 }
 
 .lead {
-	color:#efefef;
+    color:#efefef;
 }
 
 
@@ -38,10 +38,10 @@ h1 {
   margin-top:7%;
 }
   
-
-
-
-
 .notify {
     margin-top:80px;
+}
+
+.error, .message {
+    color:#fff200;
 }

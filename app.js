@@ -10,6 +10,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var async = require('async');
 
 var app = express();
 var scrape = require('./utility/xoomscraper');
@@ -41,15 +42,22 @@ var conString = process.env.DATABASE_URL || "postgres://local_admin:1661@localho
 var client = new pg.Client(conString);
 client.connect();
 
+var rateChangeTemplate = process.cwd() + '/utility/rateChangeMail.html';
+var subscribedTemplate = process.cwd() + '/utility/subscribed.html';
+
 // Make our sockets accessible to our router
 app.use(function(req,res,next){
     req.client = client;
+    req.async = async;
+    req.nodemailer = nodemailer;
+    req.smtpPool = smtpPool;
+    req.fs = fs;
+    req.subscribedTemplate = subscribedTemplate;
+    req.mustache = mustache;
+    req.sm = sm;
     next();
 });
 app.use('/', routes);
-
-
-var template = process.cwd() + '/rateChangeMail.html';
 
 
 var job = new CronJob({
@@ -57,7 +65,7 @@ var job = new CronJob({
   onTick: function() {
     console.log ("Runs every Minute..!!!");
     scrape.checkXoomValue (request, cheerio, client, function ( ) {
-        sm.sendMail (nodemailer, smtpPool, client, fs, template, mustache);
+        sm.sendMail (nodemailer, smtpPool, client, fs, rateChangeTemplate, mustache, false, null);
     });  
   },
   start: false,
