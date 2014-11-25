@@ -1,6 +1,7 @@
 exports.checkXoomValue = function (request, cheerio, client, callback) {
     
-    url = 'http://localhost:3003/';
+   // url = 'http://localhost:3003/';
+    url = 'https://www.xoom.com/india/send-money';
     
 	request(url, function(error, response, html){
 		if(!error){
