@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var sm = require('../utility/mailsender');
 
 var url = process.env.SERVICE_URL || "http://localhost:3003/services";
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function(req, res) {    
+    sm.rateChangedMail (url);
   res.render('index',{option:'Subscribe', action:"/addSubscriber"});
 });
 
@@ -32,7 +34,8 @@ router.post('/addSubscriber', function (req, res) {
                             request.post( {url:reactivateUrl, form: {email:req.body.email}, json:true }, 
                                        function (err, data, body) {
                                         if (body.reactivated) {
-                                            res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "Thanks for subscribing again !" });                
+                                            res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "Thanks for subscribing again !" }); 
+                                            sm.sendSubscriptionMail (url, req.body.email);
                                         } else {
                                             res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "Some error occured, try again later !" });                                
                                         }     
@@ -42,7 +45,8 @@ router.post('/addSubscriber', function (req, res) {
                         request.post( {url:addUrl, form: {email:req.body.email}, json:true }, 
                                    function (err, data, body) {
                                     if (body.inserted) {
-                                        res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "You will receive notification whenever the rate changes !" });                
+                                        res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "You will receive notification whenever the rate changes !" }); 
+                                        sm.sendSubscriptionMail (url, req.body.email);
                                     } else {
                                         res.render('index',{option:'Subscribe', action:"/addSubscriber", message: "Some error occured, try again later !" });                                
                                     }     
