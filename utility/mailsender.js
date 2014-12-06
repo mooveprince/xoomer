@@ -7,8 +7,8 @@ var fs = require('fs');
 var transporter = nodemailer.createTransport(smtpPool({
     service: 'Gmail',
     auth: {
-        user: process.env.XOOMER_USERNAME,
-        pass: process.env.XOOMER_PW 
+        user: process.env.XOOMER_EMAIL_USERNAME,
+        pass: process.env.XOOMER_EMAIL_PW
     },
     maxConnections: 3,
     maxMessages: 10        
