@@ -6,7 +6,7 @@ var sm = require('../utility/mailsender');
 var url = process.env.SERVICE_URL || "http://localhost:3003/services";
 /* GET home page. */
 router.get('/', function(req, res) {    
-    sm.rateChangedMail (url);
+    //sm.rateChangedMail (url);
   res.render('index',{option:'Subscribe', action:"/addSubscriber"});
 });
 
