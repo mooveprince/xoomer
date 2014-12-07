@@ -18,6 +18,10 @@ router.get('/removeSubscription', function(req, res) {
     res.render('index', {option:'Unsubscribe',action:"/removeSubscription"});
 });
 
+router.get('/terms', function(req, res) {
+    res.render('terms');
+});
+
 router.post('/addSubscriber', function (req, res) {
     var userDetailUrl = url + '/subscriberDetail';
     var addUrl = url+'/addSubscriber';

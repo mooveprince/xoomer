@@ -8,7 +8,7 @@ var transporter = nodemailer.createTransport(smtpPool({
     service: 'Gmail',
     auth: {
         user: process.env.XOOMER_EMAIL_USERNAME,
-        pass: process.env.XOOMER_EMAIL_PW
+        pass: process.env.XOOMER_EMAIL_PW 
     },
     maxConnections: 3,
     maxMessages: 10        
@@ -49,7 +49,7 @@ exports.sendSubscriptionMail = function (url, recipentEmail) {
     });
 }
 
-exports.rateChangedMail = function (url) {
+exports.rateChangedMail = function (url, oldValue, newValue) {
     var rateChangedTemplate = process.cwd() + '/utility/rateChangeMail.html';
     var getSubscriberUrl = url + '/getActiveSubscribers';
     
@@ -62,8 +62,8 @@ exports.rateChangedMail = function (url) {
                     if (err) {
                         console.log ("Err in reading template" +err);
                     } else {
-                        var htmlMsg = mustache.to_html(file, {oldValue: 50, newValue:60});
-                        var textMsg = 'Value changed from ' + 50 + ' to ' + 60;
+                        var htmlMsg = mustache.to_html(file, {oldValue: oldValue, newValue:newValue});
+                        var textMsg = 'Value changed from ' + oldValue + ' to ' + newValue;
                         var mailOptions = {
                             from: 'Xoomer Admin <ratecheckxoomer@gmail.com>',
                             bcc: emailsString,

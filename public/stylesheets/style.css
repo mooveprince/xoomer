@@ -38,3 +38,13 @@ h1 {
 .footer {
     margin: 1% 0;
 }
+
+.terms {
+    text-align: center;
+    font-family: Montserrat, arial, sans-serif;
+    font-size: 1.4em;
+}
+
+.termSub { 
+    margin-bottom: 15px;
+}

@@ -3,8 +3,11 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var CronJob = require('cron').CronJob;
 
 var routes = require('./routes/index');
+var timer = require('./utility/timer');
+var scraper = require ('./utility/xoomscraper');
 
 var app = express();
 //Port and View-engine setup
@@ -28,6 +31,32 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+
+var url = process.env.SERVICE_URL || "http://localhost:3003/services";
+
+var job = new CronJob({
+  cronTime: '0 0 * * * *',
+  onTick: function() {
+      console.log ("Runs every hour..!!!" + new Date());
+      timer.timeCheck (function (canBeRun) {
+          if (canBeRun) {
+              console.log ("Run the process");
+              scraper.rateCheckAndSendEmail (url, function (isMailSent) {
+                  if (isMailSent) {
+                      console.log ("Scrap process was done and mail was sent");
+                  } else {
+                      console.log ("No mails was sent");
+                  }
+              });
+          } else {
+              console.log ("Dnt run the prcess");
+          }
+      } );      
+  },
+  start: false,
+});
+
+job.start();
 
 
 module.exports = app;
