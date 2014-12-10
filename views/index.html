@@ -12,11 +12,11 @@
         <script type="application/javascript">
             $(document).ready ( function ( ) {
                 $('#emailForm').submit(function(event){
-                    if ($.trim($('#email').val()).length == 0) {
+                    if ($('#email').val().replace(/^\s+|\s+$/g, '').length == 0) {
                         $('.message').text ('');
                         $('.error').text("Email Cannot be empty");
                         return false;
-                    } else if (!validateEmail($.trim($('#email').val()))) {
+                    } else if (!validateEmail($('#email').val().replace(/^\s+|\s+$/g, ''))) {
                         $('.message').text ('');
                         $('.error').text("Not a valid Email");
                         return false;
