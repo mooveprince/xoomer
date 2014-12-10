@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Xoomer</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="/stylesheets/style.css" rel="stylesheet">
         <script src="http://code.jquery.com/jquery.min.js"></script>
@@ -11,11 +12,11 @@
         <script type="application/javascript">
             $(document).ready ( function ( ) {
                 $('#emailForm').submit(function(event){
-                    if ($('#email').val().trim().length == 0) {
+                    if ($.trim($('#email').val()).length == 0) {
                         $('.message').text ('');
                         $('.error').text("Email Cannot be empty");
                         return false;
-                    } else if (!validateEmail($('#email').val().trim())) {
+                    } else if (!validateEmail($.trim($('#email').val()))) {
                         $('.message').text ('');
                         $('.error').text("Not a valid Email");
                         return false;
