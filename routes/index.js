@@ -26,8 +26,8 @@ router.post('/addSubscriber', function (req, res) {
     var userDetailUrl = url + '/subscriberDetail';
     var addUrl = url+'/addSubscriber';
     var reactivateUrl = url + '/reactivatateSubscription' ;
-    
-    request.post ( {url:userDetailUrl, form: {email:req.body.email}, json:true },
+    var trimmedemail = req.body.email.replace(/^\s+|\s+$/g, '');
+    request.post ( {url:userDetailUrl, form: {email:trimmedemail}, json:true },
                   function (err, data, body) {
                     if (err) {
                         res.render('index',{option:'Add', action:"/addSubscriber", message: "Some error occured, try again later !" });
@@ -35,22 +35,22 @@ router.post('/addSubscriber', function (req, res) {
                         if (body.subscriberDetail.subscriptionStatus == 'Y') {  //check whether active user
                             res.render('index', {message: "You are already subscribed !", option:'Add', action:"/addSubscriber"});
                         } else {
-                            request.post( {url:reactivateUrl, form: {email:req.body.email}, json:true }, 
+                            request.post( {url:reactivateUrl, form: {email:trimmedemail}, json:true }, 
                                        function (err, data, body) {
                                         if (body.reactivated) {
                                             res.render('index',{option:'Add', action:"/addSubscriber", message: "Thanks for subscribing again !" }); 
-                                            sm.sendSubscriptionMail (url, req.body.email);
+                                            sm.sendSubscriptionMail (url, trimmedemail);
                                         } else {
                                             res.render('index',{option:'Add', action:"/addSubscriber", message: "Some error occured, try again later !" });                                
                                         }     
                                 });                             
                         }
                     } else {
-                        request.post( {url:addUrl, form: {email:req.body.email}, json:true }, 
+                        request.post( {url:addUrl, form: {email:trimmedemail}, json:true }, 
                                    function (err, data, body) {
                                     if (body.inserted) {
                                         res.render('index',{option:'Add', action:"/addSubscriber", message: "You will receive notification whenever the rate changes !" }); 
-                                        sm.sendSubscriptionMail (url, req.body.email);
+                                        sm.sendSubscriptionMail (url, trimmedemail);
                                     } else {
                                         res.render('index',{option:'Add', action:"/addSubscriber", message: "Some error occured, try again later !" });                                
                                     }     
@@ -62,14 +62,14 @@ router.post('/addSubscriber', function (req, res) {
 router.post ('/removeSubscription', function (req, res) { 
     var userDetailUrl = url + '/subscriberDetail';
     var deactivateUrl = url + '/deactivatateSubscription';
-    
-    request.post ( {url:userDetailUrl, form: {email:req.body.email}, json:true },
+    var trimmedemail = req.body.email.replace(/^\s+|\s+$/g, '');
+    request.post ( {url:userDetailUrl, form: {email:trimmedemail}, json:true },
                   function (err, data, body) {
                     if (err) {
                         res.render('index',{option:'Remove', action:"/removeSubscription", message: "Some error occured, try again later !" });
                     } else if (body.subscriberDetail.existingUser) { //check for existing user
                         if (body.subscriberDetail.subscriptionStatus == 'Y') { //check if they are actively subscribed
-                            request.post( {url:deactivateUrl, form: {email:req.body.email}, json:true }, 
+                            request.post( {url:deactivateUrl, form: {email:trimmedemail}, json:true }, 
                                        function (err, data, body) {
                                         if (body.removed) {
                                             res.render('index',{option:'Add', action:"/addSubscriber", message: "Sorry to see you leaving, you can subscribe back by entering again !" });                
