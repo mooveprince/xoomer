@@ -35,7 +35,7 @@ app.use('/', routes);
 var url = process.env.SERVICE_URL || "http://localhost:3003/services";
 
 var job = new CronJob({
-  cronTime: '0 0 * * * 1-5',
+  cronTime: '0 0 * * * 1-5',   
   onTick: function() {
       console.log ("Runs every hour on weekday..!!!" + new Date());
       timer.timeCheck (function (canBeRun) {
